@@ -9,8 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Getter
 @Setter
@@ -46,9 +45,17 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Events> events = new ArrayList<>();
+
     public User(String username, String email, String encode) {
         this.username = username;
         this.email = email;
         this.password = encode;
+    }
+
+    public void addEvent(Events event) {
+        events.add(event);
+        event.setUser(this);  // Associate the event with this user
     }
 }

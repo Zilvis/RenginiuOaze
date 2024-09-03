@@ -1,4 +1,4 @@
-package dev.zilvis.renginiuoaze.models;
+package dev.zilvis.renginiuoaze.enums;
 
 public enum ERole {
     ROLE_USER,

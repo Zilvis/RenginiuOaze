@@ -1,7 +1,13 @@
 package dev.zilvis.renginiuoaze.controllers;
 
+import dev.zilvis.renginiuoaze.models.Events;
+import dev.zilvis.renginiuoaze.payload.response.EventsResponse;
+import dev.zilvis.renginiuoaze.payload.response.ShortResponse;
 import dev.zilvis.renginiuoaze.payload.response.UserInfoResponse;
 import dev.zilvis.renginiuoaze.security.services.UserDetailsImpl;
+import dev.zilvis.renginiuoaze.services.EventService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,9 +26,12 @@ import java.util.stream.Collectors;
 // for Angular Client (withCredentials)
 // @CrossOrigin(origins = "http://localhost:8081", maxAge = 3600, allowCredentials="true")
 @RestController
-@RequestMapping("/api/test")
+@RequestMapping("/api/user")
 public class TestController {
     private final AuthenticationManager authenticationManager;
+
+    @Autowired
+    private EventService eventService;
 
     public TestController(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
@@ -58,9 +67,6 @@ public class TestController {
         }
 
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-        List<String> roles = userDetails.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .toList();
 
         UserInfoResponse userInfoResponse = new UserInfoResponse(
                 userDetails.getId(),
@@ -69,5 +75,21 @@ public class TestController {
         );
 
         return ResponseEntity.ok(userInfoResponse);
+    }
+
+    @GetMapping("/posts")
+    public ResponseEntity<?> getUserPosts(Authentication authentication) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        List<Events> eventsPage = eventService.getEventListByUserId(userDetails.getId());
+
+        List<ShortResponse> eventResponse = eventsPage.stream()
+                .map(ShortResponse::new)
+                .toList();
+
+        return ResponseEntity.ok(eventResponse);
     }
 }

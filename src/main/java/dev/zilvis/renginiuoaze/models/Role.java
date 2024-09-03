@@ -1,5 +1,6 @@
 package dev.zilvis.renginiuoaze.models;
 
+import dev.zilvis.renginiuoaze.enums.ERole;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

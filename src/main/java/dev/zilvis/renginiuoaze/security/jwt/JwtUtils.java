@@ -35,7 +35,7 @@ public class JwtUtils {
         String headerAuth = request.getHeader("Authorization");
 
         if (headerAuth != null && headerAuth.startsWith("Bearer ")) {
-            return headerAuth.substring(7);  // Extract the token by removing "Bearer "
+            return headerAuth.substring(7);
         }
 
         return null;

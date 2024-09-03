@@ -66,8 +66,11 @@ public class WebSecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth ->
                         auth.requestMatchers("/api/auth/**").permitAll()
+                                .requestMatchers("/api/images/**").permitAll()
                                 .requestMatchers("/api/test/**").permitAll()
-                                .anyRequest().authenticated()
+                                .requestMatchers("/api/events/public/**").permitAll()
+                                .requestMatchers("/uploads/**").permitAll()
+                                .anyRequest().permitAll()
                 );
 
         http.authenticationProvider(authenticationProvider());
