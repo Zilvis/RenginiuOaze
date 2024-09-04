@@ -41,6 +41,7 @@ public class JwtUtils {
         return null;
     }
 
+
     public ResponseCookie generateJwtCookie(UserDetailsImpl userPrincipal) {
         String jwt = generateTokenFromUsername(userPrincipal.getUsername());
         ResponseCookie cookie = ResponseCookie.from(jwtCookie, jwt)
@@ -66,6 +67,14 @@ public class JwtUtils {
                 .getPayload()
                 .getSubject();
     }
+
+//    public Claims extractClaims(String token) {
+//        return Jwts.parser()
+//                .verifyWith(key())
+//                .build()
+//                .parseSignedClaims(token)
+//                .getPayload();
+//    }
 
     private SecretKey key() {
         return Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecret));

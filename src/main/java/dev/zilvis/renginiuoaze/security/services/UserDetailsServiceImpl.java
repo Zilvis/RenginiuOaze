@@ -1,5 +1,8 @@
 package dev.zilvis.renginiuoaze.security.services;
 
+import com.stripe.model.PaymentIntent;
+import com.stripe.model.checkout.Session;
+import dev.zilvis.renginiuoaze.models.Tickets;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -25,4 +28,26 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         return UserDetailsImpl.build(user);
     }
 
+    public void createTicketForUser(User user, Session session) {
+        Tickets ticket = new Tickets();
+        ticket.setEventId(session.getMetadata().get("eventId"));
+        ticket.setUser(user);
+        ticket.setCurrency(session.getCurrency());
+        ticket.setPrice((double) (session.getAmountTotal() / 100));
+        user.getTickets().add(ticket);
+        userRepository.save(user);
+    }
+
+    public User findOrCreateUserByEmail(String email) {
+
+        User user = userRepository.findByEmail(email);
+
+        if (user == null) {
+            user = new User();
+            user.setEmail(email);
+            user.setPassword("null");
+            user.setUsername("null");// TODO
+        }
+        return user;
+    }
 }

@@ -66,11 +66,12 @@ public class WebSecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth ->
                         auth.requestMatchers("/api/auth/**").permitAll()
-                                .requestMatchers("/api/images/**").permitAll()
-                                .requestMatchers("/api/test/**").permitAll()
-                                .requestMatchers("/api/events/public/**").permitAll()
-                                .requestMatchers("/uploads/**").permitAll()
-                                .anyRequest().permitAll()
+                                .requestMatchers("/api/events/**").permitAll()
+                                .requestMatchers("/api/image/**").permitAll()
+                                .requestMatchers("/api/stripe/**").permitAll()
+                                .requestMatchers("/api/mail/**").permitAll()
+                                .requestMatchers("/api/user/**").permitAll()
+                                .anyRequest().authenticated()
                 );
 
         http.authenticationProvider(authenticationProvider());

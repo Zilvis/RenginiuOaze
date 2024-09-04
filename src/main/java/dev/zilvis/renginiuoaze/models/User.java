@@ -39,6 +39,12 @@ public class User {
     @Size(max = 120)
     private String password;
 
+    @Column(length = 16)
+    private String cardNumber;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Tickets> tickets = new ArrayList<>();
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -56,6 +62,6 @@ public class User {
 
     public void addEvent(Events event) {
         events.add(event);
-        event.setUser(this);  // Associate the event with this user
+        event.setUser(this);
     }
 }
