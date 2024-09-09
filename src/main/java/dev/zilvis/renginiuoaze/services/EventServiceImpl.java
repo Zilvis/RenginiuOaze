@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +18,8 @@ import java.util.List;
 public class EventServiceImpl implements EventService {
 
     private final EventsRepository eventsRepository;
-    private final UserRepository userRepository;
+    private final MailService mailService;
+    private final NewsLetterService newsLetterService;
 
     @Override
     public List<Events> getEvents() {
@@ -25,7 +27,8 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public Events save(Events events) {
+    public Events save(Events events) throws IOException {
+        newsLetterService.sendAll(events);
         return eventsRepository.save(events);
     }
 
@@ -45,6 +48,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public String deleteById(long id) {
+        eventsRepository.deleteById(id);
         return "";
     }
 

@@ -3,6 +3,7 @@ package dev.zilvis.renginiuoaze.security.services;
 import com.stripe.model.PaymentIntent;
 import com.stripe.model.checkout.Session;
 import dev.zilvis.renginiuoaze.models.Tickets;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -14,28 +15,17 @@ import dev.zilvis.renginiuoaze.models.User;
 import dev.zilvis.renginiuoaze.repository.UserRepository;
 
 @Service
+@RequiredArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-    @Autowired
-    UserRepository userRepository;
+    private final UserRepository userRepository;
 
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + username));
-
         return UserDetailsImpl.build(user);
-    }
-
-    public void createTicketForUser(User user, Session session) {
-        Tickets ticket = new Tickets();
-        ticket.setEventId(session.getMetadata().get("eventId"));
-        ticket.setUser(user);
-        ticket.setCurrency(session.getCurrency());
-        ticket.setPrice((double) (session.getAmountTotal() / 100));
-        user.getTickets().add(ticket);
-        userRepository.save(user);
     }
 
     public User findOrCreateUserByEmail(String email) {

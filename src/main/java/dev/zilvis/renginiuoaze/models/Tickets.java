@@ -16,6 +16,8 @@ public class Tickets {
     private String eventId;
     private Double price;
     private String currency;
+    private String ticketNumber;
+    private boolean isActive;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

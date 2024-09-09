@@ -6,6 +6,7 @@ import dev.zilvis.renginiuoaze.models.User;
 import dev.zilvis.renginiuoaze.security.services.UserDetailsServiceImpl;
 import dev.zilvis.renginiuoaze.services.MailService;
 import dev.zilvis.renginiuoaze.services.StripeService;
+import dev.zilvis.renginiuoaze.services.TicketService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +22,7 @@ public class StripeController {
     private final StripeService stripeService;
     private final UserDetailsServiceImpl userService;
     private final MailService mailService;
+    private final TicketService ticketService;
 
     @PostMapping("/create-checkout-session")
     public ResponseEntity<Map<String, String>> createCheckoutSession(@RequestBody Map<String, Object> data) {
@@ -63,7 +65,7 @@ public class StripeController {
 
             User user = userService.findOrCreateUserByEmail(customerEmail);
 
-            userService.createTicketForUser(user, session);
+            ticketService.createTicketForUser(user, session);
 
             mailService.sendHtmlEmail("Testas subject",customerEmail,"Labas");
 

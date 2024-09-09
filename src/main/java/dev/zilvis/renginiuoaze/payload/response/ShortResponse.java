@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -19,7 +21,7 @@ public class ShortResponse {
     private Long userId;
     private double price;
     private String location;
-    private String date;
+    private LocalDateTime date;
 
     public ShortResponse(Events events) {
         this.id = events.getId();

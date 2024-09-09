@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -20,7 +22,7 @@ public class EventsResponse {
     private double price;
     private String location;
     private String imageUrl;
-    private String date;
+    private LocalDateTime date;
 
     public EventsResponse(Events events) {
         this.id = events.getId();

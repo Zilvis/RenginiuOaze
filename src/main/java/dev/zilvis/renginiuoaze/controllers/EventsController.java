@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,7 +41,7 @@ public class EventsController {
     @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<?> addEvent(
             @RequestParam("title") String title,
-            @RequestParam("date") String date,
+            @RequestParam("date") LocalDateTime date,
             @RequestParam("description") String description,
             @RequestParam("location") String location,
             @RequestParam("price") Double price,
@@ -97,10 +98,15 @@ public class EventsController {
 
     // Vieno Post gavimas
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<?> getEventById(@PathVariable Long id) {
         Events e = eventService.findById(id);
         EventsResponse eventResponse = e != null ? new EventsResponse(e) : new EventsResponse();
         return ResponseEntity.ok(eventResponse);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteById(@PathVariable Long id){
+        eventService.deleteById(id);
     }
 }
